@@ -42,7 +42,7 @@ public class UserController
         return ResponseEntity.ok(service.getUserById(id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/update")
     public ResponseEntity<String> updateUser(@PathVariable Long id,
                                              @RequestBody UserRequest request)
     {

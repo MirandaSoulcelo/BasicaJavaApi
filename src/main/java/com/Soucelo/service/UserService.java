@@ -21,6 +21,13 @@ public class UserService
     {
         String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(hashedPassword);
+
+        if (repository.existsByEmail(user.getEmail()))
+            throw new RuntimeException("Email já cadastrado");
+
+        if (repository.existsByCpf(user.getCpf()))
+            throw new RuntimeException("CPF já cadastrado");
+
         repository.createUser(user);
     }
 

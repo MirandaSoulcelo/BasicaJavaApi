@@ -40,6 +40,7 @@ public class UserRepository implements IUserRepository
         }
     }
 
+    @Override
     public User getUserById(Long id)
     {
         String sql = "SELECT * FROM Users WHERE excluded != 1 AND id = ?";
@@ -67,6 +68,7 @@ public class UserRepository implements IUserRepository
         return user;
     }
 
+    @Override
     public List<User> getUsers()
     {
         String sql = "SELECT * FROM Users WHERE Users.excluded != 1";
@@ -95,6 +97,76 @@ public class UserRepository implements IUserRepository
         return users;
     }
 
+    @Override
+    public boolean existsByCpf(String cpf)
+    {
+        String sql = "SELECT cpf from Users where cpf = ?";
+        try(Connection conn = DriverManager.getConnection(url);
+            PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            stmt.setString(1, cpf);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean existsByEmail(String email)
+    {
+        String sql = "SELECT email from Users where email = ?";
+        try(Connection conn = DriverManager.getConnection(url);
+            PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public User getUserByEmail(String email)
+    {
+        String sql = "SELECT * FROM Users WHERE excluded != 1 AND email = ?";
+
+        User user = null;
+
+        try (Connection conn = DriverManager.getConnection(url);
+             PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            stmt.setString(1, email);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next())
+            {
+                user = new User(rs.getLong("id"),
+                                rs.getString("name"),
+                                rs.getString("email"),
+                                rs.getString("password"),
+                                rs.getString("cpf"),
+                                rs.getBoolean("excluded"),
+                                rs.getBoolean("isAdmin"));
+            }
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+
+    @Override
     public void updateUser(User user)
     {
         String sql = "UPDATE Users SET name = ?, email = ?, password = ?, cpf = ?, excluded = ?, isAdmin = ? WHERE id = ?";
@@ -115,6 +187,7 @@ public class UserRepository implements IUserRepository
         }
     }
 
+    @Override
     public void createUser(User user)
     {
         String sql = "INSERT INTO Users (name, " +
@@ -141,6 +214,7 @@ public class UserRepository implements IUserRepository
         }
     }
 
+    @Override
     public void inactivateUser(Long id)
     {
         String sql = "UPDATE Users SET excluded = true WHERE id = ?";

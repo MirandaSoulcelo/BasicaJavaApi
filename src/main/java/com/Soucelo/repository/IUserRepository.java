@@ -11,4 +11,7 @@ public interface IUserRepository
     void updateUser(User user);
     User getUserById(Long id);
     void inactivateUser(Long id);
+    User getUserByEmail(String email);
+    boolean existsByEmail(String email);
+    boolean existsByCpf(String cpf);
 }
