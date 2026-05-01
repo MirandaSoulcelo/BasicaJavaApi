@@ -11,5 +11,9 @@ target/
 # Sistema
 .DS_Store
 Thumbs.db
+
 # Database
 *.db
+
+# Configurações sensíveis
+application.properties
