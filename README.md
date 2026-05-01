@@ -43,7 +43,7 @@ A aplicação vai subir em `http://localhost:8080`
 
 ---
 
-## 📡 Endpoints
+## 📡 Endpoints(Por enquanto)
 
 | Método | URL | Descrição |
 |--------|-----|-----------|
@@ -64,3 +64,10 @@ A aplicação vai subir em `http://localhost:8080`
 ## 📚 Aprendizados
 
 > Projeto desenvolvido com fins educacionais para explorar Java, Spring Boot e boas práticas de APIs REST.
+
+##  FUTURAS IMPLEMENTAÇÕES porque a vida não é um morango:
+> Adição de validators conforme a complexidade dos endpoints forem aumentado
+> Autenticação JWT
+> Adição de um banco SQL utilizando SQL SERVER
+> implementação das interfaces para escalabilidade e manutenção
+> Uso de consultas mais limpas no sistema, usando QueryDSL + as Q-classes
