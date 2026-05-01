@@ -1,4 +1,4 @@
-# BasicaJavaApi 🚀
+# BasicJavaApi 🚀
 
 API REST básica desenvolvida em Java com Spring Boot, criada para fins de aprendizado, exploração e boas práticas de desenvolvimento.
 A ideia é ir melhorando ele no meu tempo livre, então pretendo percorrer todos os tópicos relevantes para construção de uma API Restfull
