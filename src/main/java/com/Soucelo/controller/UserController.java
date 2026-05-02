@@ -1,10 +1,12 @@
 package com.Soucelo.controller;
 
 
+import com.Soucelo.dto.request.UserRequestDTO;
+import com.Soucelo.dto.response.UserResponseDTO;
 import com.Soucelo.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.Soucelo.domain.model.User;
+
 import java.util.List;
 
 @RestController
@@ -19,42 +21,31 @@ public class UserController
     }
 
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody UserRequest request)
+    public ResponseEntity<String> createUser(@RequestBody UserRequestDTO request)
     {
-        User user = new User(request.name(),
-                             request.email(),
-                             request.password(),
-                             request.cpf(),
-                             request.excluded(),
-                             request.isAdmin());
-        service.createUser(user);
+        service.createUser(request);
         return ResponseEntity.status(201).body("user created!");
     }
 
     @GetMapping
-    public List<User> getUsers() {
-        return service.GetUsers();
+    public List<UserResponseDTO> getUsers()
+    {
+        return service.getUsers();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id)
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id)
     {
         return ResponseEntity.ok(service.getUserById(id));
     }
 
     @PutMapping("/{id}/update")
     public ResponseEntity<String> updateUser(@PathVariable Long id,
-                                             @RequestBody UserRequest request)
+                                             @RequestBody UserRequestDTO request)
     {
-        User user =new User(id,
-                            request.name(),
-                            request.email(),
-                            request.password(),
-                            request.cpf(),
-                            request.excluded(),
-                            request.isAdmin());
 
-        service.updateUser(user);
+
+        service.updateUser(id, request);
         return ResponseEntity.ok("user updated!");
     }
 
@@ -63,15 +54,5 @@ public class UserController
     {
         service.inactivateUser(id);
         return ResponseEntity.ok("user inactivate!");
-    }
-
-    record UserRequest(String name,
-                       String email,
-                       String password,
-                       String cpf,
-                       boolean excluded,
-                       boolean isAdmin)
-    {
-
     }
 }

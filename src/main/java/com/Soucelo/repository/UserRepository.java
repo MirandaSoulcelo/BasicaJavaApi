@@ -43,7 +43,7 @@ public class UserRepository implements IUserRepository
     @Override
     public User getUserById(Long id)
     {
-        String sql = "SELECT * FROM Users WHERE excluded != 1 AND id = ?";
+        String sql = "SELECT * FROM Users WHERE excluded = 0 AND id = ?";
         User user = null;
         try (Connection conn = DriverManager.getConnection(url);
              PreparedStatement stmt = conn.prepareStatement(sql))
@@ -71,7 +71,7 @@ public class UserRepository implements IUserRepository
     @Override
     public List<User> getUsers()
     {
-        String sql = "SELECT * FROM Users WHERE Users.excluded != 1";
+        String sql = "SELECT * FROM Users WHERE excluded = 0";
         List<User> users = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(url);
@@ -177,8 +177,8 @@ public class UserRepository implements IUserRepository
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());
             stmt.setString(4, user.getCpf());
-            stmt.setBoolean(5, user.getVerifyIsExcluded());
-            stmt.setBoolean(6, user.getVerifyIsAdmin());
+            stmt.setBoolean(5, user.isExcluded());
+            stmt.setBoolean(6, user.isAdmin());
             stmt.setLong(7, user.getId());
             stmt.executeUpdate();
         }catch(Exception e)
@@ -204,8 +204,8 @@ public class UserRepository implements IUserRepository
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());
             stmt.setString(4, user.getCpf());
-            stmt.setBoolean(5, user.getVerifyIsExcluded());
-            stmt.setBoolean(6, user.getVerifyIsAdmin());
+            stmt.setBoolean(5, user.isExcluded());
+            stmt.setBoolean(6, user.isAdmin());
             stmt.executeUpdate();
         }
         catch (Exception e)

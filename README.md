@@ -39,10 +39,10 @@ Este projeto tem como objetivo praticar a construção de uma API RESTful em Jav
 
 ```bash
 # Clone o repositório
-git clone https://github.com/MirandaSoulcelo/BasicaJavaApi.git
+git clone https://github.com/MirandaSoulcelo/BasicJavaApi.git
 
 # Entre na pasta do projeto
-cd BasicaJavaApi
+cd BasicJavaApi
 ```
 
 ### ⚙️ Configurando o application.properties
@@ -125,7 +125,7 @@ POST /auth/login
     "email": "joao@email.com",
     "password": "123456",
     "cpf": "12345678900",
-    "excluded": false,
+    "isExcluded": false,
     "isAdmin": false
 }
 ```

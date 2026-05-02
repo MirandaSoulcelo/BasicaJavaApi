@@ -24,9 +24,8 @@ public class AuthController {
     public String login(@RequestBody LoginDTO dto) {
 
         var auth = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        dto.getEmail(),
-                        dto.getPassword()
+                new UsernamePasswordAuthenticationToken(dto.getEmail(),
+                                                        dto.getPassword()
                 )
         );
 

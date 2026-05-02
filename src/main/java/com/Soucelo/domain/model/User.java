@@ -7,7 +7,7 @@ public class User
     private String email;
     private String password;
     private String cpf;
-    private Boolean excluded;
+    private Boolean isExcluded;
     private Boolean isAdmin;
 
     public User(Long id,
@@ -15,7 +15,7 @@ public class User
                 String email,
                 String password,
                 String cpf,
-                Boolean excluded,
+                Boolean isExcluded,
                 Boolean isAdmin)
     {
         this.id = id;
@@ -23,9 +23,11 @@ public class User
         this.email = email;
         this.password = password;
         this.cpf = cpf;
-        this.excluded = excluded;
+        this.isExcluded = isExcluded;
         this.isAdmin = isAdmin;
     }
+
+
 
     public User() {}
 
@@ -33,14 +35,14 @@ public class User
                 String email,
                 String password,
                 String cpf,
-                boolean excluded,
+                boolean isExcluded,
                 boolean isAdmin)
     {
         this.name = nome;
         this.email = email;
         this.password = password;
         this.cpf = cpf;
-        this.excluded = excluded;
+        this.isExcluded = isExcluded;
         this.isAdmin = isAdmin;
     }
 
@@ -49,7 +51,7 @@ public class User
     public String getEmail() { return email; }
     public String getPassword() { return password; }
     public String getCpf() { return cpf; }
-    public Boolean getVerifyIsExcluded() { return excluded; }
-    public Boolean getVerifyIsAdmin() { return isAdmin; }
+    public Boolean isExcluded() { return isExcluded; }
+    public Boolean isAdmin() { return isAdmin; }
     public void setPassword(String password) { this.password = password; }
 }

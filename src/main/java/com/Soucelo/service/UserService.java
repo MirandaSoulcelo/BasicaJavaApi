@@ -1,6 +1,8 @@
 package com.Soucelo.service;
 
 import com.Soucelo.domain.model.User;
+import com.Soucelo.dto.request.UserRequestDTO;
+import com.Soucelo.dto.response.UserResponseDTO;
 import com.Soucelo.repository.IUserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
@@ -17,35 +19,64 @@ public class UserService
         this.repository = repository;
     }
 
-    public void createUser(User user)
+    public void createUser(UserRequestDTO userRequest)
     {
-        String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
-        user.setPassword(hashedPassword);
-
-        if (repository.existsByEmail(user.getEmail()))
+        if (repository.existsByEmail(userRequest.getEmail()))
             throw new RuntimeException("Email já cadastrado");
 
-        if (repository.existsByCpf(user.getCpf()))
+        if (repository.existsByCpf(userRequest.getCpf()))
             throw new RuntimeException("CPF já cadastrado");
+
+        String hashedPassword = BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt());
+
+        User user = new User(userRequest.getName(),
+                             userRequest.getEmail(),
+                             hashedPassword,
+                             userRequest.getCpf(),
+                             userRequest.isExcluded(),
+                             userRequest.isAdmin());
 
         repository.createUser(user);
     }
 
-    public List<User> GetUsers()
+    public List<UserResponseDTO> getUsers()
     {
-        return repository.getUsers();
+        List<User> users = repository.getUsers();
+
+        return users.stream()
+                    .map(u -> new UserResponseDTO(u.getId(),
+                                                        u.getName(),
+                                                        u.getEmail(),
+                                                        u.getCpf(),
+                                                        u.isAdmin()))
+                    .toList();
     }
 
-    public void updateUser(User user)
+    public void updateUser(Long id, UserRequestDTO userRequest)
     {
-        String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
-        user.setPassword(hashedPassword);
+        String hashedPassword = BCrypt.hashpw(userRequest.getPassword(),
+                                              BCrypt.gensalt());
+
+        User user = new User(id,
+                             userRequest.getName(),
+                             userRequest.getEmail(),
+                             hashedPassword,
+                             userRequest.getCpf(),
+                             userRequest.isExcluded(),
+                             userRequest.isAdmin());
+
         repository.updateUser(user);
     }
 
-    public User getUserById(Long id)
+    public UserResponseDTO getUserById(Long id)
     {
-        return repository.getUserById(id);
+        User user = repository.getUserById(id);
+        UserResponseDTO userResponse = new UserResponseDTO(user.getId(),
+                                                           user.getName(),
+                                                           user.getEmail(),
+                                                           user.getCpf(),
+                                                           user.isAdmin());
+        return userResponse;
     }
 
     public void inactivateUser(Long id)

@@ -19,7 +19,7 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        if (user.getVerifyIsAdmin()) {
+        if (user.isAdmin()) {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
 
@@ -31,7 +31,7 @@ public class CustomUserDetails implements UserDetails {
     @Override public boolean isAccountNonExpired() { return true; }
     @Override public boolean isAccountNonLocked() { return true; }
     @Override public boolean isCredentialsNonExpired() { return true; }
-    @Override public boolean isEnabled() { return !user.getVerifyIsExcluded(); }
+    @Override public boolean isEnabled() { return !user.isExcluded(); }
 
     public User getUser() { return user; }
 }
