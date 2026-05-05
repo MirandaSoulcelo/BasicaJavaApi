@@ -1,7 +1,7 @@
 # BasicJavaApi 🚀
 
 API REST desenvolvida em Java com Spring Boot, criada para fins de aprendizado e boas práticas de desenvolvimento.
-A ideia é ir melhorando no tempo livre, percorrendo todos os tópicos relevantes para construção de uma API RESTful.
+A ideia é ir melhorando no meu  tempo livre, percorrendo todos os tópicos relevantes para construção de uma API RESTful.
 
 ---
 
@@ -17,6 +17,7 @@ Este projeto tem como objetivo praticar a construção de uma API RESTful em Jav
 - Autenticação stateless com JWT
 - Segurança com Spring Security
 - Documentação com Swagger/OpenAPI
+- Testes unitários com JUnit 5 e Mockito
 
 ---
 
@@ -30,6 +31,9 @@ Este projeto tem como objetivo praticar a construção de uma API RESTful em Jav
 - jBCrypt 0.4
 - JJWT 0.11.5
 - SpringDoc OpenAPI (Swagger) 2.3.0
+- JUnit 5
+- Mockito
+- AssertJ
 
 ---
 
@@ -143,6 +147,36 @@ POST /auth/login
 
 ---
 
+## 🧪 Testes
+
+O projeto adota testes unitários com foco na camada de **Service**, onde reside a regra de negócio.
+
+### Ferramentas utilizadas
+
+| Ferramenta | Responsabilidade |
+|---|---|
+| **JUnit 5** | Estrutura e execução dos testes |
+| **Mockito** | Criação e controle de objetos falsos (mocks) |
+| **AssertJ** | Verificação fluente dos resultados |
+
+### Como rodar os testes
+
+```bash
+mvn test
+```
+
+### Cenários cobertos
+
+**UserService**
+- Criação de usuário com dados válidos
+- Exceção ao cadastrar email já existente
+- Exceção ao cadastrar CPF já existente
+- Retorno de usuário ativo por ID
+- Exceção ao buscar usuário inativo
+- Exceção ao buscar ID inexistente
+
+---
+
 ## 📚 Aprendizados
 
 > Projeto desenvolvido com fins educacionais para explorar Java, Spring Boot e boas práticas de APIs REST.
@@ -157,3 +191,4 @@ POST /auth/login
 - Consultas mais limpas com QueryDSL + Q-classes
 - Roles e permissões por endpoint (ROLE_ADMIN, ROLE_USER)
 - Refresh token
+- Ampliar cobertura de testes para demais métodos
