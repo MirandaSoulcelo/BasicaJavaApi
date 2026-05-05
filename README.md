@@ -149,7 +149,7 @@ POST /auth/login
 
 ## 🧪 Testes
 
-O projeto adota testes unitários com foco na camada de **Service**, onde reside a regra de negócio.
+O projeto adota testes unitários com foco na camada de **Service**, onde reside a regra de negócio. O repositório é mockado — nenhum teste acessa banco de dados real.
 
 ### Ferramentas utilizadas
 
@@ -165,15 +165,81 @@ O projeto adota testes unitários com foco na camada de **Service**, onde reside
 mvn test
 ```
 
-### Cenários cobertos
+---
 
-**UserService**
-- Criação de usuário com dados válidos
-- Exceção ao cadastrar email já existente
-- Exceção ao cadastrar CPF já existente
-- Retorno de usuário ativo por ID
-- Exceção ao buscar usuário inativo
-- Exceção ao buscar ID inexistente
+### Estrutura base
+
+Os testes seguem o padrão **AAA (Arrange → Act → Assert)** e utilizam mocks para isolar o Service do banco de dados:
+
+```java
+@ExtendWith(MockitoExtension.class)
+public class UserServiceTest {
+
+    @Mock
+    IUserRepository repository; // repositório falso — não bate no banco
+
+    @InjectMocks
+    UserService service; // service real com o repositório falso injetado
+}
+```
+
+---
+
+### Exemplos de cenários cobertos
+
+**✅ Criação de usuário com dados válidos**
+```java
+@Test
+void createUser_shouldCreateUser_whenHasValidData() {
+    when(repository.existsByEmail("joao@gmail.com")).thenReturn(false);
+    when(repository.existsByCpf("123.567.789-00")).thenReturn(false);
+
+    service.createUser(userValidRequest());
+
+    verify(repository, times(1)).createUser(any(User.class));
+}
+```
+
+**❌ Exceção ao cadastrar email já existente**
+```java
+@Test
+void createUser_shouldThrowException_whenEmailAlreadyExists() {
+    when(repository.existsByEmail("joao@gmail.com")).thenReturn(true);
+
+    assertThatThrownBy(() -> service.createUser(userValidRequest()))
+            .isInstanceOf(RuntimeException.class)
+            .hasMessage("Email already exists");
+
+    verify(repository, never()).createUser(any());
+}
+```
+
+**❌ Exceção ao buscar usuário inativo**
+```java
+@Test
+void getUserById_shouldNotReturnAnUser_whenUserIsInactive() {
+    when(repository.getUserById(1L)).thenReturn(null);
+    when(repository.isInactiveUser(1L)).thenReturn(true);
+
+    assertThatThrownBy(() -> service.getUserById(1L))
+            .isInstanceOf(RuntimeException.class)
+            .hasMessage("You cannot search for inactive users");
+}
+```
+
+---
+
+### Todos os cenários cobertos
+
+**UserService — `createUser`**
+- ✅ Criação de usuário com dados válidos
+- ❌ Exceção ao cadastrar email já existente
+- ❌ Exceção ao cadastrar CPF já existente
+
+**UserService — `getUserById`**
+- ✅ Retorno de usuário ativo por ID
+- ❌ Exceção ao buscar usuário inativo
+- ❌ Exceção ao buscar ID inexistente
 
 ---
 
