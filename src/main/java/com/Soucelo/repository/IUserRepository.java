@@ -14,4 +14,5 @@ public interface IUserRepository
     User getUserByEmail(String email);
     boolean existsByEmail(String email);
     boolean existsByCpf(String cpf);
+    boolean isInactiveUser(Long id);
 }

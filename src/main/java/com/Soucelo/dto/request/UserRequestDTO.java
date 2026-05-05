@@ -30,10 +30,7 @@ public class UserRequestDTO
     {
         return name;
     }
-    public String getEmail()
-    {
-        return email;
-    }
+    public String getEmail() {return email;}
     public String getCpf()
     {
         return cpf;

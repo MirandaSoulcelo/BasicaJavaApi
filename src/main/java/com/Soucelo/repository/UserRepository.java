@@ -229,4 +229,24 @@ public class UserRepository implements IUserRepository
         }
     }
 
+    @Override
+    public boolean isInactiveUser(Long id)
+    {
+        String sql = "SELECT 1 FROM Users WHERE id = ? AND excluded = 1";
+        try(Connection conn = DriverManager.getConnection(url);
+            PreparedStatement stmt = conn.prepareStatement(sql))
+        {
+            stmt.setLong(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            return rs.next();
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

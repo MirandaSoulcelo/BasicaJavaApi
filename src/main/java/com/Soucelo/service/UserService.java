@@ -22,10 +22,10 @@ public class UserService
     public void createUser(UserRequestDTO userRequest)
     {
         if (repository.existsByEmail(userRequest.getEmail()))
-            throw new RuntimeException("Email já cadastrado");
+            throw new RuntimeException("Email already exists");
 
         if (repository.existsByCpf(userRequest.getCpf()))
-            throw new RuntimeException("CPF já cadastrado");
+            throw new RuntimeException("CPF already exists");
 
         String hashedPassword = BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt());
 
@@ -71,6 +71,13 @@ public class UserService
     public UserResponseDTO getUserById(Long id)
     {
         User user = repository.getUserById(id);
+
+        if(user == null && repository.isInactiveUser(id))
+            throw new RuntimeException("You cannot search for inactive users");
+
+        if(user == null)
+            throw new RuntimeException("User not found");
+
         UserResponseDTO userResponse = new UserResponseDTO(user.getId(),
                                                            user.getName(),
                                                            user.getEmail(),
